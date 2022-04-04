@@ -1,11 +1,13 @@
 package logic;
 
+import service.VersionController;
+
 import java.io.File;
 
 public class Checkout extends Command {
 
-    public Checkout(Revision revision) {
-        super(revision);
+    public Checkout(Revision revision, VersionController controller) {
+        super(revision, controller);
     }
 
     @Override
@@ -15,7 +17,7 @@ public class Checkout extends Command {
 
     @Override
     public Message execute(String path) {
-        File file = new File(path+"\\version controller.dat");
-        return new Message(this.revision,"Initialized");
+        File file = new File(path + "\\version controller.dat");
+        return new Message(this.revision, "Initialized");
     }
 }

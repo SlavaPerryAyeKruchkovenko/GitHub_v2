@@ -1,8 +1,10 @@
 package logic;
 
+import service.VersionController;
+
 public class Log extends Command {
-    public Log(Revision revision) {
-        super(revision);
+    public Log(Revision revision, VersionController controller) {
+        super(revision, controller);
     }
 
     @Override

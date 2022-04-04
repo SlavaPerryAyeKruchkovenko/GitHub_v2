@@ -1,12 +1,14 @@
 package logic;
 
+import service.VersionController;
+
 import java.io.File;
 import java.io.IOException;
 
-public class Init extends Command{
+public class Init extends Command {
 
-    public Init(Revision revision) {
-        super(revision);
+    public Init(Revision revision, VersionController controller) {
+        super(revision, controller);
     }
 
     @Override
@@ -17,20 +19,19 @@ public class Init extends Command{
     @Override
     public Message execute(String path) {
         File file = new File(path);
-        if(file.exists()){
+        if (file.exists()) {
             throw new RuntimeException("file exist");
-        }
-        else if(!file.isFile()){
+        } else if (!file.isFile()) {
             throw new RuntimeException("inccorect file");
-        }
-        else{
+        } else {
             try {
-                if(file.createNewFile()){
-                    return new Message(new Revision(0),"Initialized");
+                if (file.createNewFile()) {
+                    return new Message(new Revision(0), "Initialized");
                 }
             } catch (IOException e) {
                 throw new RuntimeException(e.getMessage());
             }
         }
+        throw new RuntimeException("inccorect file");
     }
 }

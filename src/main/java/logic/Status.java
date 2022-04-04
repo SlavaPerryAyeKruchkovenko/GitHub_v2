@@ -1,9 +1,11 @@
 package logic;
 
+import service.VersionController;
+
 public class Status extends Command {
 
-    public Status(Revision revision) {
-        super(revision);
+    public Status(Revision revision, VersionController controller) {
+        super(revision, controller);
     }
 
     @Override
