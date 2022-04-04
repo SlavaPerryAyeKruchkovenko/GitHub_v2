@@ -1,10 +1,10 @@
 package service;
 
-public class File {
+public class FileInfo {
     public final String name;
-    public final Byte[] data;
+    public final byte[] data;
 
-    public File(String name, Byte[] data) {
+    public FileInfo(String name, byte[] data) {
         this.name = name;
         this.data = data;
     }

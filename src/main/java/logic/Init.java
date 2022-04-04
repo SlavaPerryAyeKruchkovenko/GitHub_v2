@@ -1,9 +1,12 @@
 package logic;
 
+import service.FileInfo;
+import service.Project;
 import service.VersionController;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 public class Init extends Command {
 
@@ -21,11 +24,13 @@ public class Init extends Command {
         File file = new File(path);
         if (file.exists()) {
             throw new RuntimeException("file exist");
-        } else if (!file.isFile()) {
-            throw new RuntimeException("inccorect file");
         } else {
             try {
+                List<FileInfo> files = controller.getAllFiles();
                 if (file.createNewFile()) {
+                    Revision revision = new Revision(0);
+                    Project project = new Project(revision, files, null);
+                    controller.setProject(project);
                     return new Message(new Revision(0), "Initialized");
                 }
             } catch (IOException e) {
