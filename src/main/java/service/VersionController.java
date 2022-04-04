@@ -17,7 +17,7 @@ public class VersionController {
 
     public String execute(String[] args) {
         Command cmd = Command.getCommand(args, this.verse);
-        Message msg = cmd.execute(this.path);
+        Message msg = cmd.execute(this.path + "\\" + name + ".json");
         return msg.getText();
     }
 }

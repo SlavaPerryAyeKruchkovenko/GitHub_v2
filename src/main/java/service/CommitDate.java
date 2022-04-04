@@ -1,6 +1,5 @@
 package service;
 
-import logic.Commit;
 import logic.Revision;
 
 import java.util.List;
