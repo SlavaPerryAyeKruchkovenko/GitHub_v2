@@ -1,5 +1,6 @@
 package logic;
 
+import service.CommitDate;
 import service.FileInfo;
 import service.Project;
 import service.VersionController;
@@ -29,7 +30,8 @@ public class Init extends Command {
                 List<FileInfo> files = controller.getAllFiles();
                 if (file.createNewFile()) {
                     Revision revision = new Revision(0);
-                    Project project = new Project(revision, files, null);
+                    CommitDate commit = new CommitDate(null, revision, files, this.getName());
+                    Project project = new Project(revision, commit);
                     controller.setProject(project);
                     return new Message(new Revision(0), "Initialized");
                 }

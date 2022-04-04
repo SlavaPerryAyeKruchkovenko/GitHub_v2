@@ -3,20 +3,23 @@ package service;
 import logic.Revision;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class CommitDate {
     private final List<FileChanges> changes;
     public final Revision revision;
     private final List<FileInfo> lessFiles;
+    private final String comment;
 
-    public CommitDate(List<FileChanges> changes, Revision revision, FileInfo... lessFiles) {
-        this.changes = changes;
+    public CommitDate(List<FileChanges> changes, Revision revision, List<FileInfo> lessFiles, String comment) {
+        this.changes = new ArrayList<>();
+        if (changes != null)
+            this.changes.addAll(changes);
         this.revision = revision;
         this.lessFiles = new ArrayList<>();
         if (lessFiles != null)
-            this.lessFiles.addAll(Arrays.asList(lessFiles));
+            this.lessFiles.addAll(lessFiles);
+        this.comment = comment;
     }
 
     public List<FileInfo> getLessFiles() {
@@ -29,5 +32,9 @@ public class CommitDate {
 
     public List<FileChanges> getChanges() {
         return this.changes;
+    }
+
+    public String getComment() {
+        return this.comment;
     }
 }
