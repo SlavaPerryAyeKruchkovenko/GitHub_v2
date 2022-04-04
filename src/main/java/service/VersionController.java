@@ -11,9 +11,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 public class VersionController {
     private final String path;
@@ -37,10 +35,11 @@ public class VersionController {
     }
 
     public String execute(String... args) {
+        String[] corArgs = Arrays.stream(args).map(x -> x.toLowerCase(Locale.ROOT)).toArray(String[]::new);
         String filePath = this.path + "\\" + name + ".json";
-        this.project = serializeJson(filePath);
+        this.project = deserializeJson(filePath);
 
-        Command cmd = Command.getCommand(args, this.verse, this);
+        Command cmd = Command.getCommand(corArgs, this.verse, this);
         Message msg = cmd.execute(filePath);
 
         this.verse = msg.getRevision();
@@ -63,7 +62,7 @@ public class VersionController {
         }
     }
 
-    private Project serializeJson(String filePath) {
+    private Project deserializeJson(String filePath) {
         File file = new File(filePath);
         if (file.exists()) {
             ObjectMapper mapper = new ObjectMapper();
@@ -71,6 +70,7 @@ public class VersionController {
                 String json = Files.lines(Paths.get(filePath)).reduce("", String::concat);
                 return mapper.readValue(json, Project.class);
             } catch (Exception e) {
+                throw new RuntimeException(e.getMessage());
             }
 
         }

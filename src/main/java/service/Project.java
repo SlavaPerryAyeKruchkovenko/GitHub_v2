@@ -1,25 +1,30 @@
 package service;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import logic.Revision;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Project {
     private Revision currentRevision;
-    private final List<CommitDate> commits;
+    private List<CommitDate> commits;
 
-    public Project(Revision revision, CommitDate... commits) {
+    public Project() {
+
+    }
+
+    public Project(Revision revision, List<CommitDate> commits) {
         this.currentRevision = revision;
         this.commits = new ArrayList<>();
         if (commits != null) {
-            this.commits.addAll(Arrays.asList(commits));
+            this.commits.addAll(commits);
         }
     }
 
     public boolean isLegacy() {
-        return this.currentRevision.id < 0;
+        return this.currentRevision.getId() < 0;
     }
 
     public Revision getCurrentRevision() {
@@ -31,14 +36,19 @@ public class Project {
     }
 
     public void setRevision(Revision newRevision) {
-        if (newRevision.id > 0)
+        if (newRevision.getId() > 0)
             this.currentRevision = newRevision;
     }
 
     public CommitDate getCommit(Revision verse) {
         for (CommitDate commit : commits)
-            if (commit.revision.id == verse.id)
+            if (commit.revision.getId() == verse.getId())
                 return commit;
         throw new RuntimeException("Revision not found");
+    }
+
+    public void setCommits(List<CommitDate> commits) {
+        if (commits != null)
+            this.commits = commits;
     }
 }

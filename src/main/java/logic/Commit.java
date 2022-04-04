@@ -17,7 +17,7 @@ public class Commit extends Command {
 
     @Override
     public String getName() {
-        return "command";
+        return "commit";
     }
 
     @Override
@@ -28,9 +28,9 @@ public class Commit extends Command {
             Project project = this.controller.getProject();
             CommitDate lessCommit = project.getCommit(this.revision);
             List<FileChanges> changes = getChanges(lessCommit, files);
-            Revision newVerse = new Revision(this.revision.id + 1);
+            Revision newVerse = new Revision(this.revision.getId() + 1);
             CommitDate commit = new CommitDate(changes, newVerse, files, this.message);
-            return new Message(newVerse, "Created Revision " + newVerse.id);
+            return new Message(newVerse, "Created Revision " + newVerse.getId());
         } else {
             throw new RuntimeException("please init program");
         }
@@ -43,7 +43,7 @@ public class Commit extends Command {
                 int index = files.indexOf(file);
                 if (index != -1) {
                     FileInfo lessfile = files.get(index);
-                    if (!Arrays.equals(lessfile.data, file.data)) {
+                    if (!Arrays.equals(lessfile.getData(), file.getData())) {
                         changes.add(new FileChanges(file, State.update));
                     }
                 }

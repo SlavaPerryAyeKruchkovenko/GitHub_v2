@@ -7,6 +7,7 @@ import service.VersionController;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Init extends Command {
@@ -30,8 +31,10 @@ public class Init extends Command {
                 List<FileInfo> files = controller.getAllFiles();
                 if (file.createNewFile()) {
                     Revision revision = new Revision(0);
+                    List<CommitDate> commits = new ArrayList<>();
                     CommitDate commit = new CommitDate(null, revision, files, this.getName());
-                    Project project = new Project(revision, commit);
+                    commits.add(commit);
+                    Project project = new Project(revision, commits);
                     controller.setProject(project);
                     return new Message(new Revision(0), "Initialized");
                 }

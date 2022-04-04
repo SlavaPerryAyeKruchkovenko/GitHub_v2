@@ -10,7 +10,7 @@ public class Main {
         Scanner in = new Scanner(System.in);
         try {
             VersionController controller = new VersionController(dir,"gayHub");
-            String value = in.nextLine();
+            String[] value = in.nextLine().split(" ");
             System.out.println(controller.execute(value));
         } catch (Exception ex) {
             System.out.println(ex.getMessage());

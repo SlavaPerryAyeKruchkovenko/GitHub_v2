@@ -1,21 +1,31 @@
 package service;
 
-import java.io.File;
-
 public class FileInfo {
-    public final String name;
-    public final byte[] data;
+    private String name;
+    private byte[] data;
+
+    public FileInfo() {
+
+    }
 
     public FileInfo(String name, byte[] data) {
         this.name = name;
         this.data = data;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public byte[] getData() {
+        return data;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (obj.getClass() == this.getClass()) {
-           FileInfo file = (FileInfo)obj;
-           return file.name == this.name;
+            FileInfo file = (FileInfo) obj;
+            return file.name == this.name;
         }
         return false;
     }

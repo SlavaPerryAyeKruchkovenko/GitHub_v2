@@ -6,11 +6,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CommitDate {
-    private final List<FileChanges> changes;
-    public final Revision revision;
-    private final List<FileInfo> lessFiles;
-    private final String comment;
+    private List<FileChanges> changes;
+    public Revision revision;
+    private List<FileInfo> lessFiles;
+    private String comment;
 
+    public CommitDate(){
+
+    }
     public CommitDate(List<FileChanges> changes, Revision revision, List<FileInfo> lessFiles, String comment) {
         this.changes = new ArrayList<>();
         if (changes != null)
