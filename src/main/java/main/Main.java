@@ -9,11 +9,9 @@ public class Main {
         final String dir = System.getProperty("user.dir");
         Scanner in = new Scanner(System.in);
         try {
-            VersionController controller = new VersionController(dir,"gayHub");
-            String[] value = in.nextLine().split(" ");
-            System.out.println(controller.execute(value));
+            VersionController controller = new VersionController(dir, "gayHub");
+            System.out.println(controller.execute(args));
         } catch (Exception ex) {
-            System.out.println(ex.getMessage());
             ex.printStackTrace();
         }
     }
