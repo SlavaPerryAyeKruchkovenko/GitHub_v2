@@ -22,6 +22,15 @@ public class FileChanges {
     }
 
     @Override
+    public boolean equals(Object obj) {
+        if (obj.getClass().equals(this.getClass())) {
+            FileInfo file = ((FileChanges) obj).getFile();
+            return this.file.equals(file);
+        }
+        return false;
+    }
+
+    @Override
     public String toString() {
         String letter = "+ ";
         switch (this.state) {
@@ -37,6 +46,6 @@ public class FileChanges {
             default:
                 letter = "+ ";
         }
-        return this.state.name() + ":\n" + letter + this.file.getName();
+        return this.state.name() + ":\n" + letter + this.file.getName() + " (" + this.file.getData().length + " bytes)";
     }
 }

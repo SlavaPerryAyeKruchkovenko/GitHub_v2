@@ -1,11 +1,8 @@
 package logic;
 
-import exstensions.ListExtensions;
 import service.*;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class Commit extends Command {

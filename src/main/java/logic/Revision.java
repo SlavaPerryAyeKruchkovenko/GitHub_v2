@@ -26,6 +26,6 @@ public class Revision {
     @Override
     public String toString() {
         return "Revision " + this.id + "\nDate: " +
-                new SimpleDateFormat("HH:mm:ss dd.mm.yyyy").format(this.date);
+                new SimpleDateFormat("HH:mm:ss dd.MM.yyyy").format(this.date);
     }
 }

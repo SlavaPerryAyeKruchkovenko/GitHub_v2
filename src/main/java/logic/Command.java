@@ -17,11 +17,11 @@ public abstract class Command {
 
     public static Command getCommand(String[] args, Revision verse, VersionController controller) {
         if (args.length >= 3) {
-            if (args[0].equals(new Diff(verse, verse, controller).getName())) {
+            if (args[0].equals(new Diff(verse, verse, verse, controller).getName())) {
                 try {
                     int num1 = Integer.decode(args[1]);
                     int num2 = Integer.decode(args[2]);
-                    return new Diff(new Revision(num1), new Revision(num2), controller);
+                    return new Diff(new Revision(num1), new Revision(num2), verse, controller);
                 } catch (Exception ex) {
                     throw new RuntimeException("incorrect parameter" + ex.getMessage());
                 }
@@ -43,7 +43,7 @@ public abstract class Command {
                 return new Init(verse, controller);
             else if (args[0].equals(new Log(verse, controller).getName()))
                 return new Log(verse, controller);
-             else if (args[0].equals(new Status(verse, controller).getName()))
+            else if (args[0].equals(new Status(verse, controller).getName()))
                 return new Status(verse, controller);
 
         } else throw new RuntimeException("empty parameter");
