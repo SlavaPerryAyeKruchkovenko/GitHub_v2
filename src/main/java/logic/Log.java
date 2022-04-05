@@ -1,6 +1,9 @@
 package logic;
 
-import service.VersionController;
+import service.*;
+
+import java.io.File;
+import java.util.List;
 
 public class Log extends Command {
     public Log(Revision revision, VersionController controller) {
@@ -14,6 +17,12 @@ public class Log extends Command {
 
     @Override
     public Message execute(String path) {
-        return null;
+        File fileIO = new File(path);
+        if (fileIO.exists() && this.controller.getProject() != null) {
+
+            return null;
+        } else {
+            throw new RuntimeException("please init program");
+        }
     }
 }

@@ -1,5 +1,7 @@
 package service;
 
+import java.util.Objects;
+
 public class FileInfo {
     private String name;
     private byte[] data;
@@ -25,7 +27,7 @@ public class FileInfo {
     public boolean equals(Object obj) {
         if (obj.getClass() == this.getClass()) {
             FileInfo file = (FileInfo) obj;
-            return file.name == this.name;
+            return Objects.equals(file.name, this.name);
         }
         return false;
     }

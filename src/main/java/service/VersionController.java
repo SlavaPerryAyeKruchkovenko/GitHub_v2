@@ -2,6 +2,7 @@ package service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import exstensions.ListExtensions;
 import logic.Command;
 import logic.Message;
 import logic.Revision;
@@ -38,6 +39,7 @@ public class VersionController {
         String[] corArgs = Arrays.stream(args).map(x -> x.toLowerCase(Locale.ROOT)).toArray(String[]::new);
         String filePath = this.path + "\\" + name + ".json";
         this.project = deserializeJson(filePath);
+        updateVerse();
 
         Command cmd = Command.getCommand(corArgs, this.verse, this);
         Message msg = cmd.execute(filePath);
@@ -83,12 +85,39 @@ public class VersionController {
         for (File file : Objects.requireNonNull(dir.listFiles())) {
             if (file.isFile()) {
                 try {
-                    files.add(new FileInfo(file.getName(), Files.readAllBytes(Paths.get(file.getName()))));
+                    if (!file.getName().contains(name + ".json"))
+                        files.add(new FileInfo(file.getName(), Files.readAllBytes(Paths.get(file.getName()))));
                 } catch (IOException e) {
                     throw new RuntimeException(e.getMessage());
                 }
             }
         }
         return files;
+    }
+
+    public List<FileChanges> getChanges(CommitDate lessCommit, List<FileInfo> files) {
+        List<FileChanges> changes = new ArrayList<>();
+        for (FileInfo file : lessCommit.getLessFiles()) {
+            if (ListExtensions.contains(files, file)) {
+                int index = files.indexOf(file);
+                if (index != -1) {
+                    FileInfo lessfile = files.get(index);
+                    if (!Arrays.equals(lessfile.getData(), file.getData()))
+                        changes.add(new FileChanges(file, State.modified));
+                }
+            } else {
+                changes.add(new FileChanges(file, State.deleted));
+            }
+        }
+        for (FileInfo file : files)
+            if (!ListExtensions.contains(lessCommit.getLessFiles(), file))
+                changes.add(new FileChanges(file, State.created));
+        return changes;
+    }
+
+    private void updateVerse() {
+        if (project != null) {
+            this.verse = this.project.getCurrentRevision();
+        }
     }
 }

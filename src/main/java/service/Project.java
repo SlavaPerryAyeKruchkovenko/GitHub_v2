@@ -46,9 +46,9 @@ public class Project {
                 return commit;
         throw new RuntimeException("Revision not found");
     }
-
-    public void setCommits(List<CommitDate> commits) {
-        if (commits != null)
-            this.commits = commits;
+    public void addCommit(CommitDate commit){
+        if(commit != null && !commits.contains(commit)){
+            this.commits.add(commit);
+        }
     }
 }

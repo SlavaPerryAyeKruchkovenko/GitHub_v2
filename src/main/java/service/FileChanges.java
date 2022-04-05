@@ -3,10 +3,12 @@ package service;
 public class FileChanges {
     private FileInfo file;
     private State state;
-    public FileChanges(){
+
+    public FileChanges() {
 
     }
-    public FileChanges(FileInfo file,State state){
+
+    public FileChanges(FileInfo file, State state) {
         this.file = file;
         this.state = state;
     }
@@ -17,5 +19,10 @@ public class FileChanges {
 
     public FileInfo getFile() {
         return file;
+    }
+
+    @Override
+    public String toString() {
+        return state.name() + ":\n" + "+ " + file.getName();
     }
 }

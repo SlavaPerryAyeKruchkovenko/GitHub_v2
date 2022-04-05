@@ -1,7 +1,7 @@
 package service;
 
 public enum State {
-    delete,
-    add,
-    update,
+    deleted,
+    created,
+    modified,
 }

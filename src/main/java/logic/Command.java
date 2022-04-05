@@ -39,13 +39,13 @@ public abstract class Command {
                 }
             }
         } else if (args.length == 1) {
-            if (args[0].equals(new Init(verse, controller).getName())) {
+            if (args[0].equals(new Init(verse, controller).getName()))
                 return new Init(verse, controller);
-            } else if (args[0].equals(new Log(verse, controller).getName())) {
+            else if (args[0].equals(new Log(verse, controller).getName()))
                 return new Log(verse, controller);
-            } else if (args[0].equals(new Status(verse, controller).getName())) {
+             else if (args[0].equals(new Status(verse, controller).getName()))
                 return new Status(verse, controller);
-            }
+
         } else throw new RuntimeException("empty parameter");
 
         throw new RuntimeException(args[0] + " parameter not found");

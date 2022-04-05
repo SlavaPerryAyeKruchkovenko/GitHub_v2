@@ -1,5 +1,6 @@
 package logic;
 
+import exstensions.ListExtensions;
 import service.*;
 
 import java.io.File;
@@ -27,35 +28,15 @@ public class Commit extends Command {
             List<FileInfo> files = controller.getAllFiles();
             Project project = this.controller.getProject();
             CommitDate lessCommit = project.getCommit(this.revision);
-            List<FileChanges> changes = getChanges(lessCommit, files);
+            List<FileChanges> changes = this.controller.getChanges(lessCommit, files);
             Revision newVerse = new Revision(this.revision.getId() + 1);
             CommitDate commit = new CommitDate(changes, newVerse, files, this.message);
+            project.addCommit(commit);
             return new Message(newVerse, "Created Revision " + newVerse.getId());
         } else {
             throw new RuntimeException("please init program");
         }
     }
 
-    private List<FileChanges> getChanges(CommitDate lessCommit, List<FileInfo> files) {
-        List<FileChanges> changes = new ArrayList<>();
-        for (FileInfo file : lessCommit.getLessFiles()) {
-            if (files.contains(file)) {
-                int index = files.indexOf(file);
-                if (index != -1) {
-                    FileInfo lessfile = files.get(index);
-                    if (!Arrays.equals(lessfile.getData(), file.getData())) {
-                        changes.add(new FileChanges(file, State.update));
-                    }
-                }
-            } else {
-                changes.add(new FileChanges(file, State.delete));
-            }
-        }
-        for (FileInfo file : files) {
-            if (!lessCommit.getLessFiles().contains(file)) {
-                changes.add(new FileChanges(file, State.add));
-            }
-        }
-        return changes;
-    }
+
 }
