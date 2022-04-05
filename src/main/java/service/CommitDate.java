@@ -11,9 +11,10 @@ public class CommitDate {
     private List<FileInfo> lessFiles;
     private String comment;
 
-    public CommitDate(){
+    public CommitDate() {
 
     }
+
     public CommitDate(List<FileChanges> changes, Revision revision, List<FileInfo> lessFiles, String comment) {
         this.changes = new ArrayList<>();
         if (changes != null)
@@ -42,7 +43,9 @@ public class CommitDate {
     }
 
     @Override
-    public String toString(){
-        return revision.toString();
+    public String toString() {
+        return revision.toString() +
+                "\nFiles: " + this.lessFiles.size() +
+                "\nComment: " + this.comment;
     }
 }

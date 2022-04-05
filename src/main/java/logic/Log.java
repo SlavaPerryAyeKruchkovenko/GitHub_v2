@@ -1,6 +1,8 @@
 package logic;
 
-import service.*;
+import service.CommitDate;
+import service.Project;
+import service.VersionController;
 
 import java.io.File;
 import java.util.List;
@@ -20,12 +22,23 @@ public class Log extends Command {
         File fileIO = new File(path);
         if (fileIO.exists() && this.controller.getProject() != null) {
             Project project = this.controller.getProject();
-            if(project != null){
+            if (project != null) {
                 List<CommitDate> commits = project.getCommits();
-
-                return null;
+                String text = commitsToString(commits);
+                return new Message(this.revision, text);
             }
         }
         throw new RuntimeException("please init program");
+    }
+
+    private String commitsToString(List<CommitDate> commits) {
+        StringBuilder builder = new StringBuilder();
+        if (commits == null)
+            return "No change";
+        else
+            for (CommitDate commit : commits)
+                if (commit.revision.getId() != 0)
+                    builder.append(commit.toString() + "\n\n");
+        return builder.toString();
     }
 }
