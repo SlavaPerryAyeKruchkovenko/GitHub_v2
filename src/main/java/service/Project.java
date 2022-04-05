@@ -5,6 +5,7 @@ import logic.Revision;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Project {
@@ -46,8 +47,11 @@ public class Project {
                 return commit;
         throw new RuntimeException("Revision not found");
     }
-    public void addCommit(CommitDate commit){
-        if(commit != null && !commits.contains(commit)){
+
+    public void addCommit(CommitDate commit) {
+        if (commit != null && !commits.contains(commit)) {
+            int id = commit.revision.getId();
+            this.commits = commits.stream().filter(x -> x.revision.getId() < id).collect(Collectors.toList());
             this.commits.add(commit);
         }
     }
