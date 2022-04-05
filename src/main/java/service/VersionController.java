@@ -8,6 +8,7 @@ import logic.Message;
 import logic.Revision;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -113,6 +114,31 @@ public class VersionController {
             if (!ListExtensions.contains(lessCommit.getLessFiles(), file))
                 changes.add(new FileChanges(file, State.created));
         return changes;
+    }
+
+    public void backup(CommitDate commit) {
+        for (FileInfo file : commit.getLessFiles()) {
+            File file1 = new File(file.getName());
+            if (file1.exists() && file1.canWrite() && file1.delete()) {
+                crateFile(file1, file);
+            } else if (!file1.exists()) {
+                crateFile(file1, file);
+            }
+        }
+    }
+
+    private void crateFile(File file1, FileInfo file) {
+        try {
+            if (file1.createNewFile()) {
+                try (FileOutputStream fos = new FileOutputStream(file1.getName())) {
+                    fos.write(file.getData());
+                } catch (Exception ex) {
+                    throw new RuntimeException(ex.getMessage());
+                }
+            }
+        } catch (IOException ex) {
+            throw new RuntimeException(ex.getMessage());
+        }
     }
 
     private void updateVerse() {
