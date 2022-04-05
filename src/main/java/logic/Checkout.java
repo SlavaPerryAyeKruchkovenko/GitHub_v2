@@ -25,16 +25,17 @@ public class Checkout extends Command {
             if (project != null) {
                 Revision currentRevision = project.getCurrentRevision();
                 //create fake commit
-                Message msg = new Commit(currentRevision, "test", this.controller)
-                        .execute(this.controller.getFilePath());
+                currentRevision = new Commit(currentRevision, "test", this.controller)
+                        .execute(this.controller.getFilePath()).getRevision();
                 //backup to need revision
                 CommitDate commit = project.getCommit(this.revision);
                 this.controller.backup(commit);
                 //get a changes
-                Command cmd = new Status(msg.getRevision(), this.controller);
+                Command cmd = new Status(currentRevision, this.controller);
                 //delete fake commit
-                project.removeCommit(msg.getRevision());
-                return cmd.execute(this.controller.getFilePath());
+                Message msg = cmd.execute(this.controller.getFilePath());
+                project.removeCommit(currentRevision);
+                return msg;
             }
         }
         throw new RuntimeException("please init program");
