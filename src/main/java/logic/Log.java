@@ -6,6 +6,7 @@ import service.VersionController;
 
 import java.io.File;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Log extends Command {
     public Log(Revision revision, VersionController controller) {
@@ -23,7 +24,11 @@ public class Log extends Command {
         if (fileIO.exists() && this.controller.getProject() != null) {
             Project project = this.controller.getProject();
             if (project != null) {
-                List<CommitDate> commits = project.getCommits();
+                int id = this.controller.getProject().getCurrentRevision().getId();
+                List<CommitDate> commits = project.getCommits()
+                        .stream()
+                        .filter(x -> x.revision.getId() <= id)
+                        .collect(Collectors.toList());
                 String text = commitsToString(commits);
                 return new Message(this.revision, text);
             }

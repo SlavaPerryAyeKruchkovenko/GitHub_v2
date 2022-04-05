@@ -1,8 +1,11 @@
 package logic;
 
+import service.CommitDate;
+import service.Project;
 import service.VersionController;
 
 import java.io.File;
+import java.util.List;
 
 public class Checkout extends Command {
 
@@ -17,7 +20,15 @@ public class Checkout extends Command {
 
     @Override
     public Message execute(String path) {
-        File file = new File(path + "\\version controller.dat");
-        return new Message(this.revision, "Initialized");
+        File fileIO = new File(path);
+        if (fileIO.exists() && this.controller.getProject() != null) {
+            Project project = this.controller.getProject();
+            if (project != null) {
+                List<CommitDate> commits = project.getCommits();
+                String text = commitsToString(commits);
+                return new Message(this.revision, text);
+            }
+        }
+        throw new RuntimeException("please init program");
     }
 }
