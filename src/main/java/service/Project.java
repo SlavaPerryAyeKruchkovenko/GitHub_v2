@@ -1,6 +1,7 @@
 package service;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import exstensions.ListExtensions;
 import logic.Revision;
 
 import java.util.ArrayList;
@@ -48,8 +49,14 @@ public class Project {
         throw new RuntimeException("Revision not found");
     }
 
+    public void removeCommit(Revision verse) {
+        this.commits = commits.stream()
+                .filter(x -> x.revision.getId() != verse.getId())
+                .collect(Collectors.toList());
+    }
+
     public void addCommit(CommitDate commit) {
-        if (commit != null && !commits.contains(commit)) {
+        if (commit != null && !ListExtensions.contains(commits, commit)) {
             int id = commit.revision.getId();
             this.commits = commits.stream().filter(x -> x.revision.getId() < id).collect(Collectors.toList());
             this.commits.add(commit);

@@ -46,6 +46,7 @@ public class FileChanges {
             default:
                 letter = "+ ";
         }
-        return this.state.name() + ":\n" + letter + this.file.getName() + " (" + this.file.getData().length + " bytes)";
+        String str = (this.state == State.deleted) ? "" : (" (" + this.file.getData().length + " bytes)");
+        return this.state.name() + ":\n" + letter + this.file.getName() + str;
     }
 }

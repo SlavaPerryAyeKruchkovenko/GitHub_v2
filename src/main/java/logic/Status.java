@@ -24,20 +24,24 @@ public class Status extends Command {
             Project project = this.controller.getProject();
             CommitDate lessCommit = project.getCommit(this.revision);
             List<FileChanges> changes = this.controller.getChanges(lessCommit, files);
-            String text = convertChanges(changes);
+            String text = convertChanges(changes, this.revision);
             return new Message(this.revision, text);
         } else {
             throw new RuntimeException("please init program");
         }
     }
 
-    private String convertChanges(List<FileChanges> changes) {
+    private String convertChanges(List<FileChanges> changes, Revision revision) {
         StringBuilder builder = new StringBuilder();
         if (changes == null || changes.size() == 0)
             return "No changes";
-        else
-            for (FileChanges change : changes)
-                builder.append(change.toString());
+        else {
+            builder.append("Current revision: " + revision.getId() + "\n");
+            for (FileChanges change : changes) {
+                builder.append(change.toString()+"\n");
+            }
+        }
+
         return builder.toString();
     }
 }

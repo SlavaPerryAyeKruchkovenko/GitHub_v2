@@ -20,11 +20,19 @@ public class VersionController {
     private Revision verse;
     private final String name;
     private Project project;
+    private final String[] forbiddenNames;
+    private final String filePath;
 
     public VersionController(String path, String name) {
         this.path = path;
         this.verse = new Revision(0);
         this.name = name;
+        this.forbiddenNames = new String[]{".jar", name + ".json"};
+        this.filePath = this.path + "\\" + name + ".json";
+    }
+
+    public String getFilePath() {
+        return this.filePath;
     }
 
     public Project getProject() {
@@ -38,19 +46,18 @@ public class VersionController {
 
     public String execute(String... args) {
         String[] corArgs = Arrays.stream(args).map(x -> x.toLowerCase(Locale.ROOT)).toArray(String[]::new);
-        String filePath = this.path + "\\" + name + ".json";
-        this.project = deserializeJson(filePath);
+        this.project = deserializeJson(this.filePath);
         updateVerse();
 
         Command cmd = Command.getCommand(corArgs, this.verse, this);
-        Message msg = cmd.execute(filePath);
+        Message msg = cmd.execute(this.filePath);
 
         this.verse = msg.getRevision();
-        project.setRevision(verse);
+        this.project.setRevision(this.verse);
         ObjectMapper mapper = new ObjectMapper();
         try {
-            String json = mapper.writeValueAsString(project);
-            saveJson(json, filePath);
+            String json = mapper.writeValueAsString(this.project);
+            saveJson(json, this.filePath);
         } catch (JsonProcessingException ex) {
             throw new RuntimeException(ex.getMessage());
         }
@@ -86,7 +93,7 @@ public class VersionController {
         for (File file : Objects.requireNonNull(dir.listFiles())) {
             if (file.isFile()) {
                 try {
-                    if (!file.getName().contains(name + ".json"))
+                    if (!file.getName().contains(forbiddenNames[0]) && !file.getName().contains(forbiddenNames[1]))
                         files.add(new FileInfo(file.getName(), Files.readAllBytes(Paths.get(file.getName()))));
                 } catch (IOException e) {
                     throw new RuntimeException(e.getMessage());
@@ -117,12 +124,26 @@ public class VersionController {
     }
 
     public void backup(CommitDate commit) {
-        for (FileInfo file : commit.getLessFiles()) {
+        List<FileInfo> newFiles = commit.getLessFiles();
+        List<FileInfo> oldFiles = getAllFiles();
+        for (FileInfo file : newFiles) {
             File file1 = new File(file.getName());
-            if (file1.exists() && file1.canWrite() && file1.delete()) {
+            // change file's data
+            if (ListExtensions.contains(oldFiles, file) && file1.exists()) {
+                if (file1.canWrite() && file1.delete()) {
+                    crateFile(file1, file);
+                }
+            }
+            // create files
+            else if (!file1.exists()) {
                 crateFile(file1, file);
-            } else if (!file1.exists()) {
-                crateFile(file1, file);
+            }
+        }
+        for (FileInfo file : oldFiles) {
+            File file1 = new File(file.getName());
+            // delete files
+            if (!ListExtensions.contains(newFiles, file) && file1.exists()) {
+                file1.delete();
             }
         }
     }

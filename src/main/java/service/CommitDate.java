@@ -43,6 +43,15 @@ public class CommitDate {
     }
 
     @Override
+    public boolean equals(Object obj) {
+        if (obj.getClass().equals(this.getClass())) {
+            Revision verse = ((CommitDate) obj).revision;
+            return this.revision.equals(verse);
+        }
+        return false;
+    }
+
+    @Override
     public String toString() {
         return revision.toString() +
                 "\nFiles: " + this.lessFiles.size() +

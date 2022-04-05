@@ -1,12 +1,10 @@
 package logic;
 
 import service.CommitDate;
-import service.FileChanges;
 import service.Project;
 import service.VersionController;
 
 import java.io.File;
-import java.util.List;
 
 public class Checkout extends Command {
 
@@ -16,7 +14,7 @@ public class Checkout extends Command {
 
     @Override
     public String getName() {
-        return null;
+        return "checkout";
     }
 
     @Override
@@ -25,22 +23,21 @@ public class Checkout extends Command {
         if (fileIO.exists() && this.controller.getProject() != null) {
             Project project = this.controller.getProject();
             if (project != null) {
+                Revision currentRevision = project.getCurrentRevision();
+                //create fake commit
+                Message msg = new Commit(currentRevision, "test", this.controller)
+                        .execute(this.controller.getFilePath());
+                //backup to need revision
                 CommitDate commit = project.getCommit(this.revision);
-                String text = convertChanges(commit.getChanges());
                 this.controller.backup(commit);
-                return new Message(this.revision, text);
+                //get a changes
+                Command cmd = new Status(msg.getRevision(), this.controller);
+                //delete fake commit
+                project.removeCommit(msg.getRevision());
+                return cmd.execute(this.controller.getFilePath());
             }
         }
         throw new RuntimeException("please init program");
     }
 
-    private String convertChanges(List<FileChanges> changes) {
-        StringBuilder builder = new StringBuilder();
-        if (changes == null || changes.size() == 0)
-            return "No changes";
-        else
-            for (FileChanges change : changes)
-                builder.append(change.toString());
-        return builder.toString();
-    }
 }
