@@ -40,4 +40,9 @@ public class CommitDate {
     public String getComment() {
         return this.comment;
     }
+
+    @Override
+    public String toString(){
+        return revision.toString();
+    }
 }

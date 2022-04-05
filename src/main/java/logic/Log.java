@@ -19,10 +19,13 @@ public class Log extends Command {
     public Message execute(String path) {
         File fileIO = new File(path);
         if (fileIO.exists() && this.controller.getProject() != null) {
+            Project project = this.controller.getProject();
+            if(project != null){
+                List<CommitDate> commits = project.getCommits();
 
-            return null;
-        } else {
-            throw new RuntimeException("please init program");
+                return null;
+            }
         }
+        throw new RuntimeException("please init program");
     }
 }

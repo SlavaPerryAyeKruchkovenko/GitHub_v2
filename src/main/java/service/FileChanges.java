@@ -14,15 +14,29 @@ public class FileChanges {
     }
 
     public State getState() {
-        return state;
+        return this.state;
     }
 
     public FileInfo getFile() {
-        return file;
+        return this.file;
     }
 
     @Override
     public String toString() {
-        return state.name() + ":\n" + "+ " + file.getName();
+        String letter = "+ ";
+        switch (this.state) {
+            case created:
+                letter = "+ ";
+                break;
+            case deleted:
+                letter = "- ";
+                break;
+            case modified:
+                letter = "* ";
+                break;
+            default:
+                letter = "+ ";
+        }
+        return this.state.name() + ":\n" + letter + this.file.getName();
     }
 }
