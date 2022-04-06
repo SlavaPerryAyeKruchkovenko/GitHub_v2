@@ -49,6 +49,14 @@ public class Project {
         throw new RuntimeException("Revision not found");
     }
 
+    public CommitDate getLastCommit() {
+        if (commits.size() > 0) {
+            return this.commits.get(commits.size() - 1);
+        } else {
+            throw new RuntimeException(" doesnt found");
+        }
+    }
+
     public void removeCommit(Revision verse) {
         this.commits = commits.stream()
                 .filter(x -> x.revision.getId() != verse.getId())

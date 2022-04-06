@@ -23,7 +23,7 @@ public class Checkout extends Command {
         if (fileIO.exists() && this.controller.getProject() != null) {
             Project project = this.controller.getProject();
             if (project != null) {
-                Revision currentRevision = project.getCurrentRevision();
+                Revision currentRevision = project.getLastCommit().revision;
                 //create fake commit
                 currentRevision = new Commit(currentRevision, "test", this.controller)
                         .execute(this.controller.getFilePath()).getRevision();
@@ -35,10 +35,14 @@ public class Checkout extends Command {
                 //delete fake commit
                 Message msg = cmd.execute(this.controller.getFilePath());
                 project.removeCommit(currentRevision);
-                return msg;
+                return new Message(this.revision, changeMistakes(msg.getText()));
             }
         }
         throw new RuntimeException("please init program");
+    }
+
+    private String changeMistakes(String text) {
+        return text.replace("revision: 3", "revision: " + this.revision.getId());
     }
 
 }

@@ -18,6 +18,7 @@ public class ListExtensions {
                 newList.add(el);
         return newList;
     }
+
     public static <T> List<T> remove(List<T> list, T element) {
         List<T> newList = new ArrayList<>(list);
         for (T el : list)
